@@ -14,6 +14,9 @@ dockr(){
 		"clean" | "-clean")
 			docker_clean
 			;;
+		"close" | "--close")
+			docker_close_containers "${docker_sub_command}";
+			;;
 		"compose" | "-comp" | "-compose")
 			docker_compose_build
 			;;
@@ -55,6 +58,32 @@ dockr(){
 
 
 # -- Helper Functions -- #
+
+function docker_close_containers () {
+	
+	local docker_close_subcommand="${1}"
+
+	if [ "${docker_close_subcommand}" == "--all" ];
+ 	then
+		docker stop $(docker ps -a -q);
+		
+	elif [ ! -z "${docker_close_subcommand}" ];
+	then	
+		local docker_container_id="${docker_close_subcommand}"
+		docker stop "${docker_container_id}";
+		
+	elif [ -z "${docker_close_subcommand}" ];
+	then
+		echo 'error: no container id passed'
+		echo 'exmaple: dockr close f570b81b2a4e'
+		echo 'tip: to close all running containers'
+		echo 'example: dockr close --all'
+	fi
+	
+	#docker rm -v $(docker ps -a -q)
+	# docker rm $(docker ps -a -q -f "status=exited*")
+	#	echo 'containers removed'
+}
 
 
 function docker_run (){
