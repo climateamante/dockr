@@ -2,14 +2,14 @@
 # version: 0.1.0
 # updated: 07.18.2017
 # about: Dockr is a set of scripts and helper tools to avoid remembering complex docker commands
-# TODO: refactor process into a proper CLI tool with testing
+# TODO: converstion process into a propper CLI tool with testing
 # TODO: create documentation and --help --version commands
 
 
 dockr(){
 	local docker_command=$1;
 	local docker_sub_command=$2;
-
+	
 	case "${docker_command}" in
 		"clean" | "-clean")
 			docker_clean
@@ -35,6 +35,10 @@ dockr(){
 		"removeall" | "-removeall" | "--removeall")
 			docker_remove_all_images_and_containers
 			;;
+		"run" | "-r" | "--run")
+			# @ symbol used to pass all arguments #
+			docker_run "${2}" "${3}"
+			;;
 		"ssh" | "-ssh")
 			docker_ssh "${docker_sub_command}"
 			;;
@@ -51,6 +55,36 @@ dockr(){
 
 
 # -- Helper Functions -- #
+
+
+function docker_run (){
+	local docker_image_id="${1}"
+	local docker_container_command="${2}"
+	
+	# -- check if image id is null --#
+	if [ -z "${docker_image_id}" ] || [ -z "${docker_container_command}" ];
+ 	then
+		echo 'error: no image:version id passed'
+		echo 'error: no shell command not passed'
+		echo 'example: dockr run image:version /bin/sh'
+	else
+		docker run -itd --rm "${docker_image_id}" "${docker_container_command}"
+		
+			# -i
+			# interactive process (shell/bash/etc)
+			# Keep STDIN open even if not attached
+
+			# -t
+			# Allocate a pseudo-tty
+			
+			# -d
+			# Detached mode
+			
+			# --rm
+			# Remove container on exit or daemon exits, whichever happens first.
+		
+	fi
+}
 
 function docker_containers () {
 	docker ps -a --format 'table {{.Names}}\t{{.Image}}\t{{.ID}}\t{{.RunningFor}}\t{{.Labels}}'
@@ -97,7 +131,7 @@ function docker_compose_build () {
 }
 
 function docker_list_all_containers () {
-	docker ps -al
+	docker ps -a
 }
 
 function docker_ip () {
