@@ -221,6 +221,9 @@ function docker_remove_container () {
 
 
 function docker_list_all_images () {
+	
+	#edge case: os.mac bash has errors when accessing the declared global array index value
+	#solution: split all bash paramater values into a new local array for each sub function
 
 	local sub_commands=($(echo "${dockr_paramaters[@]}" | tr ' ' '\n'))
 
