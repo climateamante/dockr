@@ -1,7 +1,10 @@
 #!/usr/bin/env bash
-# version: 0.1.3
-# updated: 01.16.2018
+# version: 0.1.4
+# previous: 01.16.2018
+# current: 06.11.2018
 # about: Dockr is a set of scripts and helper tools to avoid remembering complex docker commands
+
+
 # TODO: converstion process into a propper CLI tool with testing
 # TODO: create documentation and --help --version commands
 
@@ -9,6 +12,7 @@
 dockr(){
 	local docker_command=$1;
 	local docker_sub_command=$2;
+	local dockr_paramaters="${@}";
 	
 	case "${docker_command}" in
 		"clean" | "-clean")
@@ -217,5 +221,13 @@ function docker_remove_container () {
 
 
 function docker_list_all_images () {
-	docker images
+
+	local sub_commands=($(echo "${dockr_paramaters[@]}" | tr ' ' '\n'))
+
+
+	if [ "${sub_commands[1]}" == "--sort" ]; then
+		docker images | awk '{ print $1 }' | tail -n +2 | sort
+	else
+		docker images
+	fi	
 }
