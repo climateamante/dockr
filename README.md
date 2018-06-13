@@ -16,14 +16,21 @@
 
 
 ### Dependencies: ###
+
  - `awk`,`grep`,`head`,`sed`,`sort`,`tail`
- - tested with: `bash` 3.2.57
+ - tested with: `bash: 3.2.57`
 
-### Features Updated: ###
 
- - command: ``dockr images --sort``
-	> list all local docker images alphanumerically
+### Usage: ###
+ 
+When possible commands have both plural and singular names if there is no conflict
+ > intended to help new users experience and simplify codebase.
+```bash
 
+#list all local docker images alphanumerically:
+dockr images --sort
+dockr image --sort
+```
 
 ##### TODO #####
 
