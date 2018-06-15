@@ -10,9 +10,17 @@
 
 
 dockr(){
+	local version_number='0.1.4'
 	local docker_command=$1;
 	local docker_sub_command=$2;
 	local dockr_paramaters="${@}";
+	local docker_subcommands=($(echo "${dockr_paramaters[@]}" | tr ' ' '\n'))
+	
+	local error_message=$(cat <<-EOF
+	error: missing sub command paramater
+	example: dockr image --sort
+	EOF)
+	
 	
 	case "${docker_command}" in
 		"clean" | "-clean")
@@ -50,10 +58,13 @@ dockr(){
 			docker_run "${2}" "${3}"
 			;;
 		"ssh" | "-ssh")
-			docker_ssh "${docker_sub_command}"
+			docker_ssh "${docker_sub_command}";
 			;;
 		"up" | "-u" | "-up")
-			docker_up
+			docker_up;
+			;;
+		"version" | "--version" | "-v" )
+			echo "dockr:  ${version_number}";
 			;;
 	* ) echo " * error - no input command "
 		echo "$(docker --version)"
@@ -225,12 +236,51 @@ function docker_list_all_images () {
 	#edge case: os.mac bash has errors when accessing the declared global array index value
 	#solution: split all bash paramater values into a new local array for each sub function
 
-	local sub_commands=($(echo "${dockr_paramaters[@]}" | tr ' ' '\n'))
+	#local sub_commands=($(echo "${dockr_paramaters[@]}" | tr ' ' '\n'))
+	
+
+	local error_message=$(cat <<-EOF
+	error: missing sub command paramater
+	example: dockr image --sort
+	EOF
+	)
+	
+	if [  ! -z "${docker_subcommands[1]}" ]; then
+	
+		case "${docker_subcommands[1]}" in
+			"sort" | "--sort" | "-a" )
+				docker images | awk '{ print $1 }' | tail -n +2 | sort
+				;;
+			"size" | "--size" | "-s")
+				;;
+			* ) echo " * error - no input command "
+				echo "$(docker --version)"
+				# echo "$(docker-machine env)"
+			;;
+		esac
+	elif [ -z "${docker_subcommands[1]}" ]; then
+		echo "${error_message}"
+	fi
+
+	# if [ "${docker_subcommands[1]}" == "--sort" ]; then
+	# 	
+	# else
+	# 	docker images
+	# fi
 
 
-	if [ "${sub_commands[1]}" == "--sort" ]; then
-		docker images | awk '{ print $1 }' | tail -n +2 | sort
-	else
-		docker images
-	fi	
+	# if [ "${sub_commands[1]}" == "--sort" ]; then
+	# 	docker images | awk '{ print $1 }' | tail -n +2 | sort
+	# else
+	# 	docker images
+	# fi
+	
+	
 }
+
+
+
+# a="goat can try change directory if cd fails to do so."
+# a="$a Would you like to add this feature? [Y|n] "
+# absolute freedom to indent as you see fit.
+# printf '%s' "$a"; read REPLY
