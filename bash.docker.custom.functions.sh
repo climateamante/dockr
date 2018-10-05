@@ -1,16 +1,18 @@
 #!/usr/bin/env bash
-# version: 0.1.4
-# previous: 01.16.2018
-# current: 06.11.2018
+# version: 0.1.4.01
+# previous: 06.11.2018
+# current: 10.05.2018
 # about: Dockr is a set of scripts and helper tools to avoid remembering complex docker commands
 
 
 # TODO: converstion process into a propper CLI tool with testing
 # TODO: create documentation and --help --version commands
-
+# TODO: CLEAR ALL CONTAINER CACHE
+# USE WITH CAUTION! -> docker ps -q | xargs docker stop ; docker system prune -a
+# https://gist.github.com/evanscottgray/8571828
 
 dockr(){
-	local version_number='0.1.4'
+	local version_number='0.1.4.01'
 	local docker_command=$1;
 	local docker_sub_command=$2;
 	local dockr_paramaters="${@}";
@@ -59,6 +61,9 @@ dockr(){
 			;;
 		"ssh" | "-ssh")
 			docker_ssh "${docker_sub_command}";
+			;;
+		"stop" | "--stop")
+			docker_close_containers "${docker_sub_command}";
 			;;
 		"up" | "-u" | "-up")
 			docker_up;
