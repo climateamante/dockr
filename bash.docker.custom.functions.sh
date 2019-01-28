@@ -282,10 +282,3 @@ function docker_list_all_images () {
 	
 	
 }
-
-
-
-# a="goat can try change directory if cd fails to do so."
-# a="$a Would you like to add this feature? [Y|n] "
-# absolute freedom to indent as you see fit.
-# printf '%s' "$a"; read REPLY
