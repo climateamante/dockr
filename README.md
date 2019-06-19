@@ -57,10 +57,8 @@ When possible commands have both plural and singular names if there is no confli
 
 ##### TODO #####
 
-- [ ] TODO: refactor process into a proper CLI tool with testing
-- [ ] TODO: create documentation and --help --version commands
-- [ ] TODO: ( Feature/Function )
+- [ ] refactor process into a proper CLI tool with testing
+- [ ] create documentation and --help --version commands
+- [ ] ( Feature/Function )
 - [x] Able to delete containers via ``dockr remove container_id``
-- [ ] TODO: Feature
-	> Should be able to do the same and search for images: ``dockr remove image image_id``
 
